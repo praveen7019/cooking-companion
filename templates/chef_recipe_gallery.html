@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+<style>
+.container { width: 90%; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 20px; }
+.recipe-card { width: 200px; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 0 8px rgba(0,0,0,0.1); text-align: center; cursor: pointer; transition: transform 0.2s; }
+.recipe-card:hover { transform: scale(1.05); }
+.recipe-card img { width: 100%; height: 150px; object-fit: cover; }
+.recipe-card h3 { padding: 10px; font-size: 16px; }
+.recipe-card a { text-decoration: none; color: inherit; display: block; }
+</style>
+</head>
+
+<body>
+    
+    <div class="search-wrapper">
+        
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url 'search_recipe' %}" method="GET">
+                        <input type="search" name="search" style="width:1000px;" placeholder="Type Durations of recipes">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <header class="header-area">
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        
+                        <a class="navbar-brand" href="{%url 'chef_dashboard'%}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                    <li><a href="{% url 'chef_dashboard' %}">Home</a></li>
+                                    <li><a href="{% url 'chef_recipe_gallery' %}">Recipes</a></li>
+                                    <li><a href="{% url 'following_page' %}">Following</a></li>
+                                    <li><a href="{% url 'chef_profile' %}" class="profile-icon">
+                                            <i class="fa fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li><a href="{% url 'logoutview' %}" class="profile-icon">
+                                            <i class="fa fa-sign-out"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                
+                                 
+
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+   <form class="container" method="GET" action="{% url 'search_recipe_ingridents' %}">
+    <input type="text" name="ingredients"
+           placeholder="Search by recipe name or ingredients (comma separated)"
+           class="form-control">
+    <button type="submit" class="btn btn-danger">Search</button>
+</form>
+ <div class="recipe-post-area section-padding-20 ">
+    {% for recipe in recipes %}
+    <div class=" mb-5 " style="max-width: 100%;">
+        <div style="margin: 30px 10%; width: 80%;">
+            <div class="row g-2  align-items-center " >
+                <div class="col-md-4 text-center">
+                    <a  href="{% url 'chef_recipe_detail' recipe.id %}">
+                        {% if recipe.recipe_image %}
+                            <img style="height:200px; " class="rounded" src="{{ recipe.recipe_image.url }}" alt="{{ recipe.recipe_name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/200x150?text=No+Image" alt="No Image">
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body ms-5">
+                        <a class="card-title fs-4 " href="{% url 'chef_recipe_detail' recipe.id %}">{{ recipe.recipe_name }}</a> 
+                        <p class="card-text ">{{ recipe.description }}</p>
+                        <div class="card-body p-4 pb-3">
+                            <!-- Time and Servings badges -->
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <span class="badge bg-light text-dark px-3 py-2 d-flex align-items-center gap-1">
+                                    <i class="fas fa-clock text-primary"></i>
+                                    {{ recipe.cooking_time }} mins
+                                </span>
+                           
+                                 <span class="badge bg-light text-dark px-3 py-2">
+                                    {{ recipe.category }}
+                                 </span>
+                            </div>
+                            {% if recipe.user_email == current_email %}
+                                <a href="{% url 'chef_profile' %}">{{ recipe.user_name }} ({{ recipe.user_email }})</a>
+                            {% else %}
+                                <a href="{% url 'follow_page' recipe.id %}">{{ recipe.user_name }} ({{ recipe.user_email }})</a>
+                            {% endif %}
+                            <!-- Rating stars -->
+                           <div class="star-rating d-flex align-items-center" style="margin-right: 15px;">
+    <i class="fas fa-star text-warning" style="font-size: 18px;"></i>
+    <span class="text-muted ms-2 fw-bold" style="font-size: 15px;">
+        {% if recipe.avg_rating %}
+            {{ recipe.avg_rating|floatformat:1 }}
+        {% else %}
+            New
+        {% endif %}
+    </span>
+</div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+   
+
+        
+
+    
+    
+
+                    
+     
+
+    
+    <div class="follow-us-instagram">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Follow Us Instragram</h5>
+                </div>
+            </div>
+        </div>
+        <!-- Instagram Feeds -->
+        <div class="insta-feeds d-flex flex-wrap">
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta1.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta2.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta3.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta4.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta5.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta6.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta7.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<br><br><br>
+
+
+<script>
+    document.querySelectorAll('.heart-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const recipeId = this.dataset.id;
+
+            fetch(`/save/${recipeId}/`, {
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'error') {
+                    alert('Please log in to save recipes.');
+                    return;
+                }
+                // Sync ALL heart buttons for this recipe across the entire page
+                document.querySelectorAll('.heart-btn[data-id="' + recipeId + '"]').forEach(function(b) {
+                    const i = b.querySelector('i');
+                    if (data.status === 'saved') {
+                        i.style.color = '#007bff';
+                        b.title = 'Saved!';
+                    } else if (data.status === 'unsaved') {
+                        i.style.color = '#ccc';
+                        b.title = 'Save Recipe';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+    
+    <!-- jQuery-2.2.4 js -->
+    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="js/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="js/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="js/active.js"></script>
+</body>
+
+</html>

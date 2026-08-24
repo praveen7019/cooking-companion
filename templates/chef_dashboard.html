@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+     <!-- Preloader -->
+    <div id="preloader">
+        <i class="circle-preloader"></i>
+        <img src="/static/img/core-img/salad.png" alt="">
+    </div>
+    
+    
+    <div class="search-wrapper">
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url 'search_recipe' %}" method="GET">
+                        <input type="search" name="recipe" placeholder="Type any keywords...">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <header class="header-area">
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        <a class="navbar-brand" href="{% url 'chef_dashboard' %}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            <div class="classynav">
+                                <ul>
+                                    <li><a href="{% url 'chef_dashboard' %}">Home</a></li>
+                                    <li><a href="{% url 'chef_recipe_gallery' %}">Recipes</a></li>
+                                    <li><a href="{% url 'following_page' %}">Following</a></li>
+                                    <li><a href="{% url 'chef_profile' %}" class="profile-icon">
+                                            <i class="fa fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li><a href="{% url 'logoutview' %}" class="profile-icon">
+                                            <i class="fa fa-sign-out"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+                                   
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    
+    <section class="hero-area">
+        <div class="hero-slides owl-carousel">
+            
+            {% for hero in hero_recipes %}
+            <div class="single-hero-slide bg-img" style="background-image: url('{{ hero.recipe_image.url }}');">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                            <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms">
+                                <h2 data-animation="fadeInUp" data-delay="300ms">{{ hero.recipe_name }}</h2>
+                                <p data-animation="fadeInUp" data-delay="700ms">{{ hero.description|truncatewords:20 }}</p>
+                                <a href="{% url 'chef_recipe_detail' hero.id %}" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">See recipe</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="single-hero-slide bg-img" style="background-image: url(/static/img/bg-img/bg1.jpg);">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                            <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms">
+                                <h2 data-animation="fadeInUp" data-delay="300ms">Welcome to Cooking Companion</h2>
+                                <p data-animation="fadeInUp" data-delay="700ms">Upload your first recipe to see it featured here!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </section>
+    
+
+    
+
+    
+    <section class="best-recipe-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading">
+                        <h3>THE BEST RECIPES</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for best in best_recipes %}
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="single-best-recipe-area mb-30">
+                        <img src="{{ best.recipe_image.url }}" style="height: 250px; width: 100%; object-fit: cover;" alt="{{ best.recipe_name }}">
+                        <div class="recipe-content">
+                            <a href="{% url 'chef_recipe_detail' best.id %}">
+                                <h5>{{ best.recipe_name }}</h5>
+                            </a>
+                            <div class="ratings">
+                                 {% if best.avg_rating %}
+                                     <i class="fa fa-star" aria-hidden="true" style="color: #fbb710;"></i>
+                                    <span style="font-size: 14px; font-weight: bold; margin-left: 5px;">
+                                    {{ best.avg_rating|floatformat:1 }} / 5.0
+                                    </span>
+                                {% else %}
+                                    <span style="font-size: 14px; color: #999;">No rating yet</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                    <div class="col-12"><p>Recipes will appear here as they gain views!</p></div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+
+    
+    <section class="cta-area bg-img bg-overlay" style="background-image: url(/static/img/bg-img/bg4.jpg);">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <div class="cta-content text-center">
+                        <h2>Discover New Recipes</h2>
+                        <p>Cooking Companion is a place where people can discover recipes, learn cooking techniques, and share their food ideas. It helps both beginners and experts improve their cooking skills with easy steps. It also connects food lovers and encourages creativity in the kitchen.</p>
+                        <a href="{% url 'recipe_gallery' %}" class="btn delicious-btn">Discover all the recipes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    
+    <section class="small-recipe-area section-padding-80-0">
+        <div class="container">
+            <div class="row">
+
+                {% for small in small_recipes %}
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="single-small-recipe-area d-flex">
+                        <div class="recipe-thumb">
+                            <img src="{{ small.recipe_image.url }}" alt="{{ small.recipe_name }}" style="width: 100px; height: 90px; object-fit: cover;">
+                        </div>
+                        <div class="recipe-content">
+                            <span>{{ small.category }}</span>
+                            <a href="{% url 'chef_recipe_detail' small.id %}">
+                                <h5>{{ small.recipe_name }}</h5>
+                            </a>
+                            <div class="ratings">
+                                {% if small.avg_rating %}
+                                    <i class="fa fa-star" aria-hidden="true" style="color: #fbb710;"></i>
+                                    <span style="font-size: 14px; font-weight: bold; margin-left: 5px;">
+                                    {{ small.avg_rating|floatformat:1 }} / 5.0
+                                    </span>
+                                {% else %}
+                                    <span style="font-size: 14px; color: #999;">No rating yet</span>
+                                {% endif %}
+                            </div>
+                            <p>{{ small.cooking_time }} mins</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                    <div class="col-12"><p>More recipes coming soon!</p></div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+    
+
+    
+    <div class="follow-us-instagram">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Follow Us Instagram</h5>
+                </div>
+            </div>
+        </div>
+        <div class="insta-feeds d-flex flex-wrap">
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta1.jpg" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta2.jpg" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta3.jpg" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta4.jpg" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta5.jpg" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta6.jpg" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta7.jpg" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <br><br><br>
+ 
+    
+    <!-- jQuery-2.2.4 js -->
+    <script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'js/bootstrap/popper.min.js' %}"></script>
+    <!-- Bootstrap js -->
+    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    <!-- All Plugins js -->
+    <script src="{% static 'js/plugins/plugins.js' %}"></script>
+    <!-- Active js -->
+    <script src="{% static 'js/active.js' %}"></script>
+    
+    {% if messages %}
+    <script>
+      {% for message in messages %}
+        alert("{{ message }}");
+      {% endfor %}
+    </script>
+    {% endif %}
+</body>
+</html>

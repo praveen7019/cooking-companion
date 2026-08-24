@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    <title>Search Results - Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <i class="circle-preloader"></i>
+        <img src="/static/img/core-img/salad.png" alt="">
+    </div>
+
+    
+   
+    <header class="header-area">
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+
+                        <!-- Smart Logo -->
+                        <a class="navbar-brand" href="{% if is_chef %}{% url 'chef_dashboard' %}{% else %}{% url 'user_dashboard' %}{% endif %}">
+                            <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px">
+                        </a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            <div class="classynav">
+                                <ul>
+                                    <!-- Smart Links -->
+                                    <li><a href="{% if is_chef %}{% url 'chef_dashboard' %}{% else %}{% url 'user_dashboard' %}{% endif %}">Home</a></li>
+                                    <li><a href="{% if is_chef %}{% url 'chef_recipe_gallery' %}{% else %}{% url 'recipe_gallery' %}{% endif %}">Recipes</a></li>
+                                    <li><a href="{% url 'following_page' %}">Following</a></li>
+                                    
+                                    <li>
+                                        <a href="{% if is_chef %}{% url 'chef_profile' %}{% else %}{% url 'user_profile' %}{% endif %}" class="profile-icon">
+                                            <i class="fa fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'logoutview' %}" class="profile-icon">
+                                            <i class="fa fa-sign-out"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    
+
+    
+    <section class="best-recipe-area section-padding-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading text-left mt-5">
+                        <h3>Search Results</h3>
+                        <p>Showing recipes based on your ingredients: <strong>"{{ query }}"</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Loop through the results dictionary passed from views.py -->
+                {% for item in results %}
+                <div class="col-12 col-lg-6 mb-5">
+                    <div class="card shadow-sm h-100" style="border-radius: 15px; overflow: hidden;">
+                        <div class="row no-gutters h-100">
+                            <!-- Recipe Image -->
+                            <div class="col-md-5">
+                                {% if item.recipe.recipe_image %}
+                                <img src="{{ item.recipe.recipe_image.url }}" alt="{{ item.recipe.recipe_name }}" style="height: 100%; width: 100%; object-fit: cover;">
+                                {% else %}
+                                <img src="/static/img/bg-img/bg1.jpg" alt="Default Image" style="height: 100%; width: 100%; object-fit: cover;">
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Recipe Content -->
+                            <div class="col-md-7">
+                                <div class="card-body d-flex flex-column h-100">
+                                    <h5 class="card-title mb-1">{{ item.recipe.recipe_name }}</h5>
+                                    <p class="text-muted small mb-2">{{ item.recipe.category }}</p>
+
+                                    <!-- Match Percentage Badge -->
+                                    <div class="mb-3">
+                                        <span class="badge" style="background-color: #40ba37; color: white; padding: 6px 12px; font-size: 13px;">
+                                            Match: {{ item.match_count }} ingredients ({{ item.match_percent }}%)
+                                        </span>
+                                    </div>
+
+                                    <!-- Available Ingredients List -->
+                                    <h6 style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">Available Ingredients:</h6>
+                                    <ul class="list-unstyled small mb-3">
+                                        {% for matched_ing in item.matched %}
+                                            <li><i class="fa fa-check" style="color: #40ba37; margin-right: 5px;"></i> {{ matched_ing }}</li>
+                                        {% empty %}
+                                            <li class="text-muted">No exact matches.</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <!-- Missing Ingredients List -->
+                                    <h6 style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">Missing Ingredients:</h6>
+                                    <ul class="list-unstyled small mb-4">
+                                        {% for missing_ing in item.missing %}
+                                            <li><i class="fa fa-times" style="color: #ff0000; margin-right: 5px;"></i> {{ missing_ing }}</li>
+                                        {% empty %}
+                                            <li class="text-success"><i class="fa fa-star" style="color: #fbb710;"></i> You have everything!</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <!-- Pushes the button to the bottom of the card -->
+                                    <div class="mt-auto">
+                                        <a href="{% url 'recipe_detail' item.recipe.id %}" class="btn delicious-btn w-100" style="padding: 0 15px; height: 40px; line-height: 40px;">View Full Recipe</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- If no results match -->
+                {% empty %}
+                <div class="container mt-4">
+    {% if results or search_recipe %}
+        <!-- Your existing card grid here[cite: 3, 4] -->
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fa-solid fa-magnifying-glass text-muted mb-3" style="font-size: 3rem;"></i>
+            <h3>No recipes found</h3>
+            <p class="text-muted">Try adjusting your keywords or ingredients.</p>
+            <a href="{% url 'recipe_gallery' %}" class="btn delicious-btn">Back to Gallery</a>
+        </div>
+    {% endif %}
+</div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+
+    <br><br><br>
+
+    
+    <script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugins/plugins.js' %}"></script>
+    <script src="{% static 'js/active.js' %}"></script>
+</body>
+</html>

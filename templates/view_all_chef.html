@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin Chefs | Cooking Companion</title>
+    <link rel="icon" href="{% static 'img/core-img/logo2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-accent: #6366f1;
+            --danger-accent:  #f43f5e;
+            --sidebar-dark: #0f172a;
+            --sidebar-light: #1e293b;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; overflow-x: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 250px; height: 100vh; background: linear-gradient(180deg, var(--sidebar-dark) 0%, var(--sidebar-light) 100%); position: fixed; top: 0; left: 0; color: white; z-index: 100; box-shadow: 4px 0 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .sidebar-brand { padding: 30px 20px; font-size: 1.15rem; font-weight: 700; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; color: #f8fafc; }
+        .sidebar-brand i { color: var(--primary-accent); font-size: 1.4rem; }
+        .sidebar-nav { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .sidebar-nav li { padding: 4px 16px; }
+        .sidebar-nav a { display: flex; align-items: center; padding: 12px 16px; color: #94a3b8; text-decoration: none; border-radius: 8px; transition: all 0.2s ease; font-weight: 500; font-size: 0.95rem; }
+        .sidebar-nav a i { width: 32px; font-size: 1.1rem; color: #64748b; transition: color 0.2s ease; }
+        .sidebar-nav a:hover, .sidebar-nav a.active { background-color: rgba(255,255,255,0.05); color: #ffffff; }
+        .sidebar-nav a.active i, .sidebar-nav a:hover i { color: var(--primary-accent); }
+        .logout-btn { margin: 20px; background: rgba(244, 63, 94, 0.1); border-radius: 8px; }
+        .logout-btn a { color: #fca5a5; display: flex; padding: 12px 16px; text-decoration: none; align-items: center; border-radius: 8px; font-weight: 500; }
+        .logout-btn a i { color: #f43f5e; width: 32px; font-size: 1.1rem; }
+        .logout-btn a:hover { background: rgba(244, 63, 94, 0.2); color: #fff; }
+        
+        /* Main & Table */
+        .main-content { margin-left: 250px; padding: 40px; }
+        .page-header { margin-bottom: 35px; }
+        .page-header h2 { font-weight: 700; color: var(--sidebar-dark); margin: 0; font-size: 1.8rem; letter-spacing: -0.5px; }
+        .table-container { background: var(--bg-card); border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid rgba(226, 232, 240, 0.8); overflow-x: auto; }
+        .modern-table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        .modern-table th { background: #f8fafc; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; padding: 16px; border-bottom: 2px solid #e2e8f0; text-align: left; }
+        .modern-table td { padding: 16px; border-bottom: 1px solid #e2e8f0; color: var(--text-main); font-weight: 500; font-size: 0.95rem; vertical-align: middle; }
+        .modern-table tr:hover { background: #f1f5f9; }
+        
+        /* Action Button */
+        .action-btn { padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .btn-delete { background: #ffe4e6; color: #e11d48; }
+        .btn-delete:hover { background: #e11d48; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-brand"><i class="fa-solid fa-fire-burner"></i>Cooking Companion</div>
+        <ul class="sidebar-nav">
+            <li><a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li><a href="{% url 'view_all_user' %}"><i class="fa-solid fa-users"></i> Users</a></li>
+            <li><a href="{% url 'view_recipe_admin' %}"><i class="fa-solid fa-book-open"></i> Recipes</a></li>
+            <li><a href="{% url 'view_all_chef' %}" class="active"><i class="fa-solid fa-kitchen-set"></i> Chefs</a></li>
+            <li><a href="{% url 'view_all_booking' %}"><i class="fa-solid fa-calendar-check"></i> Bookings</a></li>
+        </ul>
+        <div class="logout-btn"><a href="{% url 'logoutview' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h2>👨‍🍳 Manage Chefs</h2>
+        </div>
+
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if cheflist %}
+                        {% for u in cheflist %}
+                        <tr>
+                            <td style="color: var(--text-muted);">#{{ u.id }}</td>
+                            <td>{{ u.name }}</td>
+                            <td style="color: var(--text-muted);">{{ u.email }}</td>
+                            <td style="color: var(--text-muted);">{{ u.contact }}</td>
+                            <td class="text-center">
+                                <a href="{% url 'delete_chef' u.id %}" class="action-btn btn-delete">
+                                    <i class="fa-solid fa-trash-can"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4" style="color: var(--text-muted);">No Chefs Found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

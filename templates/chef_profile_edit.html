@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Chef Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, #ff6600, #ff914d);
+            padding: 15px 30px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+            color: #ffff00;
+        }
+
+        /* Form Container */
+        .container {
+            width: 50%;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #ff6600;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="email"], textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .btn-submit {
+            display: inline-block;
+            background-color: #ff6600;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #ff914d;
+        }
+
+        .current-image {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .current-image img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid #ff6600;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div><b>Cooking Companion - Chef Panel</b></div>
+    <div>
+        <a href="{% url 'chef_dashboard' %}">Dashboard</a>
+        <a href="{% url 'chef_upload_recipe' %}">Upload Recipe</a>
+        <a href="{% url 'chef_profile' %}">Profile</a>
+        <a href="{% url 'logoutview' %}">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Edit Profile</h2>
+    <form method="POST" action="{% url 'chef_profile_edit' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="{{ chef.name }}" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ chef.email }}" readonly>
+
+        <label for="contact">Contact</label>
+        <input type="text" id="contact" name="contact" value="{{ chef.contact }}" required>
+
+        <label for="experince">Experience</label>
+        <textarea id="experince" name="experince" required>{{ chef.experince }}</textarea>
+
+        <label>Current Profile Image</label>
+        <div class="current-image">
+            {% if chef.chef_image %}
+                <img src="{{ chef.chef_image.url }}" alt="{{ chef.name }}">
+            {% else %}
+              No Image Uploded
+            {% endif %}
+        </div>
+
+        <label for="chef_image">Change Profile Image</label>
+        <input type="file" id="chef_image" name="chef_image">
+
+        <button type="submit" class="btn-submit">Update Profile</button>
+    </form>
+</div>
+{% if messages %}
+    <script>
+      {% for message in messages %}
+        alert("{{ message }}");
+      {% endfor %}
+    </script>
+    {% endif %}
+</body>
+</html>

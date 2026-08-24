@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe List</title>
+<style>
+body { font-family: Arial; background: #f4f6f8; margin:0; padding:0; }
+.container { width: 90%; margin: 20px auto; }
+.recipe-card { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+.recipe-card img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+.recipe-card video { width: 100%; max-height: 300px; margin-bottom: 10px; }
+h2 { margin-top: 0; }
+p { margin: 5px 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>All Recipes</h1>
+    {% for recipe in recipes %}
+    <div class="recipe-card">
+        <h2>{{ recipe.recipe_name }}</h2>
+        <p><strong>Category:</strong> {{ recipe.category }}</p>
+        <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+        <p><strong>Uploaded by:</strong> {{ recipe.user_name }} ({{ recipe.user_email }})</p>
+        <p><strong>Description:</strong> {{ recipe.description }}</p>
+        <h3>Ingredients:</h3>
+        <p>{{ recipe.ingredients|linebreaks }}</p>
+        <h3>Steps:</h3>
+        <p>{{ recipe.steps|linebreaks }}</p>
+        {% if recipe.recipe_image %}
+            <img src="{{ recipe.recipe_image.url }}" alt="{{ recipe.recipe_name }}">
+        {% endif %}
+        {% if recipe.recipe_video %}
+            <video controls>
+                <source src="{{ recipe.recipe_video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
+    </div>
+    
+    {% empty %}
+    <p>No recipes found.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>

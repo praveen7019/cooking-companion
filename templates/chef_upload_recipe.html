@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Recipe</title>
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+<style>
+    body{
+     
+        margin:0;
+        padding:0;
+    }
+
+    .contain{
+        width:500px;
+        margin:40px auto;
+        background:#fff;
+        padding:25px;
+        border-radius:10px;
+        box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2{
+        text-align:center;
+        margin-bottom:20px;
+    }
+
+    label{
+        font-weight:bold;
+    }
+
+    input, textarea, select{
+        width:100%;
+        padding:10px;
+        margin:8px 0 15px 0;
+        border:1px solid #ccc;
+        border-radius:6px;
+    }
+
+    button{
+        width:100%;
+        padding:12px;
+        background:#28a745;
+        color:white;
+        border:none;
+        border-radius:6px;
+        font-size:16px;
+        cursor:pointer;
+    }
+
+    button:hover{
+        background:#218838;
+    }
+</style>
+</head>
+
+<body>
+
+    
+    <div class="search-wrapper">
+        
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url 'search_recipe' %}" method="GET">
+                        <input type="search" name="recipe" placeholder="Type any keywords...">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <header class="header-area">
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        
+                        <a class="navbar-brand" href="{%url 'chef_dashboard' %}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                    <li><a href="{% url 'chef_dashboard' %}">Home</a></li>
+                                    <li><a href="{% url 'chef_recipe_gallery' %}">Recipes</a></li>
+                                    <li><a href="{% url 'following_page' %}">Following</a></li>
+                                    <li><a href="{% url 'chef_profile' %}" class="profile-icon">
+                                            <i class="fa fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li><a href="{% url 'logoutview' %}" class="profile-icon">
+                                            <i class="fa fa-sign-out"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                
+                                   
+                                
+                                 
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+<div class="contain">
+<h2>Upload Recipe</h2>
+
+<form id="upload-recipe-form" action="{% url 'upload_recipe_code_chef' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Recipe Name</label>
+    <input type="text" name="recipe_name" placeholder="Enter recipe name" required>
+    
+    <label>Category</label>
+    <select name="category">
+    <option>Starter</option>
+    <option>Main Course</option>
+    <option>Dessert</option>
+    <option>Beverage</option>
+    </select>
+    
+    <label>Cooking Time (minutes)</label>
+    <input type="number" name="time" placeholder="Example: 30">
+    
+    <label>Ingredients</label>
+
+    <!-- Dynamic ordered ingredient list -->
+    <div id="ingredients-container" style="margin: 8px 0 8px 0;">
+        <ol id="ingredient-list" style="padding-left: 20px; margin-bottom: 8px;">
+            <li style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <input type="text" name="ingredients" class="ingredient-input"
+                       placeholder="e.g. 2 cups flour"
+                       style="flex:1; margin:0; padding:8px; border:1px solid #ccc; border-radius:6px;">
+                <button type="button" onclick="removeIngredient(this)"
+                        style="width:auto; padding:6px 12px; background:#dc3545; border-radius:6px; font-size:14px;">&#x2715;</button>
+            </li>
+        </ol>
+        <button type="button" onclick="addIngredient()"
+                style="width:auto; padding:8px 18px; background:#007bff; border-radius:6px; font-size:14px; margin-bottom:8px;">
+            + Add Ingredient
+        </button>
+    </div>
+
+    <script>
+    function addIngredient() {
+        const li = document.createElement('li');
+        li.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:6px;';
+        li.innerHTML = `
+            <input type="text" name="ingredients" class="ingredient-input"
+                   placeholder="e.g. 1 tsp salt"
+                   style="flex:1; margin:0; padding:8px; border:1px solid #ccc; border-radius:6px;">
+            <button type="button" onclick="removeIngredient(this)"
+                    style="width:auto; padding:6px 12px; background:#dc3545; border-radius:6px; font-size:14px;">&#x2715;</button>
+        `;
+        document.getElementById('ingredient-list').appendChild(li);
+    }
+
+    function removeIngredient(btn) {
+        const list = document.getElementById('ingredient-list');
+        if (list.children.length > 1) {
+            btn.closest('li').remove();
+        }
+    }
+    </script>
+    
+    <label>Instructions</label>
+
+    <!-- Dynamic ordered instructions list -->
+    <div id="instructions-container" style="margin: 8px 0 8px 0;">
+        <ol id="instruction-list" style="padding-left: 20px; margin-bottom: 8px;">
+            <li style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <input type="text" name="instructions" class="instruction-input"
+                       placeholder="e.g. Preheat oven to 180°C"
+                       style="flex:1; margin:0; padding:8px; border:1px solid #ccc; border-radius:6px;">
+                <button type="button" onclick="removeInstruction(this)"
+                        style="width:auto; padding:6px 12px; background:#dc3545; border-radius:6px; font-size:14px;">&#x2715;</button>
+            </li>
+        </ol>
+        <button type="button" onclick="addInstruction()"
+                style="width:auto; padding:8px 18px; background:#007bff; border-radius:6px; font-size:14px; margin-bottom:8px;">
+            + Add Step
+        </button>
+    </div>
+
+    <script>
+    function addInstruction() {
+        const li = document.createElement('li');
+        li.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:6px;';
+        li.innerHTML = `
+            <input type="text" name="instructions" class="instruction-input"
+                   placeholder="e.g. Mix well and set aside"
+                   style="flex:1; margin:0; padding:8px; border:1px solid #ccc; border-radius:6px;">
+            <button type="button" onclick="removeInstruction(this)"
+                    style="width:auto; padding:6px 12px; background:#dc3545; border-radius:6px; font-size:14px;">&#x2715;</button>
+        `;
+        document.getElementById('instruction-list').appendChild(li);
+    }
+
+    function removeInstruction(btn) {
+        const list = document.getElementById('instruction-list');
+        if (list.children.length > 1) {
+            btn.closest('li').remove();
+        }
+    }
+    </script>
+    
+    <label>Description</label>
+    <textarea name="description" rows="5" placeholder="Enter description"></textarea>
+    
+    <label>Upload Recipe Image</label>
+    <input type="file" name="image">
+    <label>Video Option</label>
+<div style="display:flex; flex-direction:row; gap:30px; align-items:center; margin-bottom:15px;">
+    <label style="display:flex; align-items:center; gap:8px; font-weight:bold; cursor:pointer;">
+        <input type="radio" name="video_choice" value="upload" checked onclick="toggleVideo(this.value)" style="width:auto; margin:0;">
+        📁 Upload Video File
+    </label>
+    <label style="display:flex; align-items:center; gap:8px; font-weight:bold; cursor:pointer;">
+        <input type="radio" name="video_choice" value="youtube" onclick="toggleVideo(this.value)" style="width:auto; margin:0;">
+        ▶️ YouTube Link
+    </label>
+</div>
+
+<div id="upload_section">
+    <label>Upload Recipe Video</label>
+    <input type="file" name="video" accept="video/*">
+</div>
+
+<div id="youtube_section" style="display:none;">
+    <label>Paste YouTube Video URL</label>
+    <input type="text" name="youtube_url" placeholder="e.g. https://www.youtube.com/watch?v=xxxxxx">
+</div>
+
+<script>
+function toggleVideo(choice) {
+    document.getElementById('upload_section').style.display = choice === 'upload' ? 'block' : 'none';
+    document.getElementById('youtube_section').style.display = choice === 'youtube' ? 'block' : 'none';
+}
+</script>
+    <input type="hidden" class="form-control" name="user_name" value="{{ chef_profile.name }}" >
+    <input type="hidden" class="form-control" name="user_email" value="{{ chef_profile.email }}" >
+    <button type="submit">Upload Recipe</button>
+    
+</form>
+</div>
+{% if messages %}
+    <script>
+      {% for message in messages %}
+        alert("{{ message }}");
+      {% endfor %}
+    </script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,48 @@
+body{
+background:#f4f6f9;
+}
+
+.sidebar{
+
+width:220px;
+height:100vh;
+background:#1f3c88;
+color:white;
+position:fixed;
+padding:20px;
+
+}
+
+.sidebar ul{
+list-style:none;
+padding:0;
+}
+
+.sidebar li{
+padding:10px 0;
+}
+
+.sidebar a{
+color:white;
+text-decoration:none;
+}
+
+.main{
+
+margin-left:240px;
+padding:20px;
+
+}
+
+.stat{
+
+padding:20px;
+color:white;
+border-radius:10px;
+
+}
+
+.blue{background:#3b82f6;}
+.green{background:#22c55e;}
+.orange{background:#f59e0b;}
+.red{background:#ef4444;}

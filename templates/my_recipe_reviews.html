@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+<style>
+    body{
+        color:black;
+    }
+    p{
+        color:black;
+    }
+</style>
+    </head>
+    <body>
+<h2>Reviews for Your Recipes</h2>
+
+{% for item in recipe_reviews %}
+    <div style="border:2px solid #444; padding:15px; margin:15px 0;">
+        <h3>{{ item.recipe.recipe_name }}</h3>
+        <img src="{{ item.recipe.recipe_image.url }}" width="200">
+        <p>{{ item.recipe.description }}</p>
+        <p><b>Cooking Time:</b> {{ item.recipe.cooking_time }} mins</p>
+
+        <h4>User Reviews:</h4>
+        {% for rec in item.reviews %}
+            <div style="border:1px solid #ddd; padding:10px; margin:10px 0;">
+                <p><b>{{ rec.user.name }}</b> rated: 
+                    {% for i in "12345" %}
+        {% if forloop.counter <= rec.rating %}
+            <i class="fas fa-star" style="color:#f1c40f;"></i>
+        {% else %}
+            <i class="far fa-star" style="color:#ccc;"></i>
+        {% endif %}
+    {% endfor %}
+                </p>
+                <p>{{ rec.comment }}</p>
+                <small>Submitted on: {{ rec.created_at|date:"d M Y H:i" }}</small>
+            </div>
+        {% empty %}
+            <p>No reviews yet for this recipe.</p>
+        {% endfor %}
+    </div>
+{% empty %}
+    <p>You haven’t uploaded any recipes yet.</p>
+{% endfor %}
+</body>
+</html>

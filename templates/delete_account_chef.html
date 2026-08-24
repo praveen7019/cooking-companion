@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Delete Account - Cooking Companion</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root { --bs-font-sans-serif: "Work Sans", sans-serif; }
+        body  { font-family: var(--bs-font-sans-serif); background: #f5f0e8; }
+
+        /* ── centre the card like the login page ── */
+        .delete-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 40px 16px;
+        }
+        .delete-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.12);
+            text-align: center;
+        }
+        .delete-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c2c2c;
+            margin-bottom: 6px;
+        }
+        .delete-card .subtitle {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+        .delete-card label {
+            display: block;
+            text-align: left;
+            margin-bottom: 16px;
+        }
+        .delete-card label span {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        .delete-card input[type="email"],
+        .delete-card input[type="password"] {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color .2s;
+            box-sizing: border-box;
+        }
+        .delete-card input:focus {
+            outline: none;
+            border-color: #d4af7a;
+        }
+        /* matches .forgot-pass exactly */
+        .forgot-pass {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #cfcfcf;
+            cursor: pointer;
+        }
+        .forgot-pass a { color: #cfcfcf; text-decoration: none; }
+        .forgot-pass a:hover { text-decoration: underline; }
+
+        /* delete-pass — same style but danger red */
+        .delete-pass {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #e74c3c;
+            cursor: pointer;
+        }
+        .delete-pass a { color: #e74c3c; text-decoration: none; }
+        .delete-pass a:hover { text-decoration: underline; }
+
+        /* matches .submit */
+        .btn-danger-submit {
+            display: block;
+            width: 100%;
+            margin-top: 26px;
+            padding: 13px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .btn-danger-submit:hover { background: #c0392b; }
+
+        .btn-cancel {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 13px;
+            color: #888;
+            text-decoration: none;
+        }
+        .btn-cancel:hover { color: #333; text-decoration: underline; }
+
+        .warning-icon { font-size: 48px; color: #e74c3c; margin-bottom: 14px; }
+    </style>
+</head>
+
+<header class="header-area">
+    <div class="delicious-main-menu">
+        <div class="classy-nav-container breakpoint-off">
+            <div class="container">
+                <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                    <a class="navbar-brand" href="{% url 'homepage' %}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px">
+                    </a>
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+                    <div class="classy-menu">
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+                        <div class="classynav">
+                            <ul>
+                                <li><a href="{% url 'homepage' %}">Home</a></li>
+                                <li><a href="{% url 'chef_login' %}">Login</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<body>
+<div class="delete-wrapper">
+    <div class="delete-card">
+        <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h2>Delete Your Chef Account</h2>
+        <p class="subtitle">
+            This action is <strong>permanent and cannot be undone.</strong><br>
+            All your recipes, bookings, and profile data will be erased.<br>
+            Enter your credentials below to confirm.
+        </p>
+
+        <form method="POST" action="{% url 'delete_chef_account_confirm' %}">
+            {% csrf_token %}
+            <label>
+                <span>Email</span>
+                <input type="email" name="email" required placeholder="your@email.com">
+            </label>
+            <label>
+                <span>Password</span>
+                <input type="password" name="password" required placeholder="••••••••">
+            </label>
+
+            <button type="submit" class="btn-danger-submit"
+                onclick="return confirm('Are you absolutely sure you want to permanently delete your account? This cannot be undone.');">
+                <i class="fa-solid fa-trash-can"></i>&nbsp; Delete My Account
+            </button>
+        </form>
+
+        <br>
+        <a href="{% url 'chef_login' %}" class="btn-cancel">← Cancel, take me back</a>
+    </div>
+</div>
+
+{% if messages %}
+<script>
+  {% for message in messages %}
+    alert("{{ message }}");
+  {% endfor %}
+</script>
+{% endif %}
+</body>
+</html>

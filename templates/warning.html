@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+<style>
+.container { width: 90%; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 20px; }
+.recipe-card { width: 200px; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 0 8px rgba(0,0,0,0.1); text-align: center; cursor: pointer; transition: transform 0.2s; }
+.recipe-card:hover { transform: scale(1.05); }
+.recipe-card img { width: 100%; height: 150px; object-fit: cover; }
+.recipe-card h3 { padding: 10px; font-size: 16px; }
+.recipe-card a { text-decoration: none; color: inherit; display: block; }
+</style>
+</head>
+
+<body>
+    
+    <div class="search-wrapper">
+        
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url 'search_recipe' %}" method="GET">
+                        <input type="search" name="search" style="width:1000px;" placeholder="Type Durations of recipes">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <header class="header-area">
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        
+                        <a class="navbar-brand" href="{% url 'homepage' %}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                         <li><a href="{% url 'homepage' %}">Home</a></li>
+                                    <li><a href="{% url 'warning' %}">recipies</a></li>
+                                    <li><a href="{% url 'chef_login' %}">chef</a></li>
+                                     <li><a href="{% url 'admin_login' %}">Admin</a></li>
+                                    <li><a href="{% url 'user_login' %}" class="profile-icon">
+                                            <i class="fa fa-user"></i>
+                                        </a>
+                                </ul>
+
+                                
+                                 
+
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
+        <div class="row border border-black shadow-lg p-5 rounded">
+            <div class="col-12 text-center">
+                <h1>Warning </h1>
+                <h3>login to view recipes and follow chefs</h3>
+                <button class="btn btn-primary mt-4" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+            </div>
+        </div>
+    </div>
+</form>
+ <div class="recipe-post-area section-padding-20 ">
+    {% for recipe in recipes %}
+    <div class=" mb-5 " style="max-width: 100%;">
+        <div style="margin: 30px 10%; width: 80%;">
+            <div class="row g-2  align-items-center " >
+                <div class="col-md-4 text-center">
+                    <a  href="{% url 'recipe_detail' recipe.id %}">
+                        {% if recipe.recipe_image %}
+                            <img style="height:200px; " class="rounded" src="{{ recipe.recipe_image.url }}" alt="{{ recipe.recipe_name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/200x150?text=No+Image" alt="No Image">
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body ms-5">
+                        <a class="card-title fs-4 " href="{% url 'recipe_detail' recipe.id %}">{{ recipe.recipe_name }}</a> 
+                        <p class="card-text ">{{ recipe.description }}</p>
+                        <div class="card-body p-4 pb-3">
+                            <!-- Time and Servings badges -->
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <span class="badge bg-light text-dark px-3 py-2 d-flex align-items-center gap-1">
+                                    <i class="fas fa-clock text-primary"></i>
+                                    {{ recipe.cooking_time }} mins
+                                </span>
+                                <span class="badge bg-light text-dark px-3 py-2">
+                                    {{ recipe.servings }} servings
+                                </span>
+                                 <span class="badge bg-light text-dark px-3 py-2">
+                                    {{ recipe.category }}
+                                 </span>
+                            </div>
+                            {% if recipe.user_email == current_email %}
+                                <a href="{% url 'user_profile' %}">{{ recipe.user_name }} ({{ recipe.user_email }})</a>
+                            {% else %}
+                                <a href="{% url 'follow_page' recipe.id %}">{{ recipe.user_name }} ({{ recipe.user_email }})</a>
+                            {% endif %}
+                            <!-- Rating stars -->
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="star-rating d-flex">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                    </div>
+                                    <span class="text-muted small ms-1">4.8</span>
+                                    <a href="{% url 'recipe_detail' recipe.id %}" style="margin-left: 55%; margin-right: 10px; padding:10px 20px; background-color:#00b7ff; border-radius:10%">view recipe</a>
+                                    <button class="heart-btn" data-id="{{ recipe.id }}" title="Save Recipe" style="background:none; border:1px solid grey; border-radius:100%; cursor:pointer; padding:10px; outline:none;">
+                                        <i class="fas fa-heart" style="color: {% if recipe.id in saved_ids %}#007bff{% else %}#ccc{% endif %};"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+   
+
+        
+
+    
+    
+
+                    
+     
+
+    
+    <div class="follow-us-instagram">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Follow Us Instragram</h5>
+                </div>
+            </div>
+        </div>
+        <!-- Instagram Feeds -->
+        <div class="insta-feeds d-flex flex-wrap">
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta1.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta2.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta3.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta4.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta5.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta6.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+            <!-- Single Insta Feeds -->
+            <div class="single-insta-feeds">
+                <img src="/static/img/bg-img/insta7.jpg" alt="">
+                <!-- Icon -->
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<br><br><br>
+
+
+<script>
+    document.querySelectorAll('.heart-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const recipeId = this.dataset.id;
+
+            fetch(`/save/${recipeId}/`, {
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'error') {
+                    alert('Please log in to save recipes.');
+                    return;
+                }
+                // Sync ALL heart buttons for this recipe across the entire page
+                document.querySelectorAll('.heart-btn[data-id="' + recipeId + '"]').forEach(function(b) {
+                    const i = b.querySelector('i');
+                    if (data.status === 'saved') {
+                        i.style.color = '#007bff';
+                        b.title = 'Saved!';
+                    } else if (data.status === 'unsaved') {
+                        i.style.color = '#ccc';
+                        b.title = 'Save Recipe';
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+    
+    <!-- jQuery-2.2.4 js -->
+    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="js/bootstrap/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="js/bootstrap/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="js/plugins/plugins.js"></script>
+    <!-- Active js -->
+    <script src="js/active.js"></script>
+</body>
+
+</html>

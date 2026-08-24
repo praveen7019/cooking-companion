@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+</head>
+
+<body>
+   
+    
+    <div class="search-wrapper">
+        
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url 'search_recipe' %}" method="GET">
+                        <input type="search" name="search" placeholder="Type any keywords...">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <header class="header-area">
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        
+                        <a class="navbar-brand" href="{% if is_chef %}{% url 'chef_dashboard' %}{% else %}{% url 'user_dashboard' %}{% endif %}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                    <li><a href="{% if is_chef %}{% url 'chef_dashboard' %}{% else %}{% url 'user_dashboard' %}{% endif %}">Home</a></li>
+                                    <li><a href="{% if is_chef %}{% url 'chef_recipe_gallery' %}{% else %}{% url 'recipe_gallery' %}{% endif %}">Recipes</a></li>
+                                    <li><a href="{% url 'following_page' %}">Following</a></li>
+                                    
+                                    <li><a href="{% if is_chef %}{% url 'chef_profile' %}{% else %}{% url 'user_profile' %}{% endif %}" class="profile-icon">
+                                            <i class="fa fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li><a href="{% url 'logoutview' %}" class="profile-icon">
+                                            <i class="fa fa-sign-out"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                
+                                   
+                                
+                                 
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+
+        {% for item in data %}
+        <div class="col-12 mb-4 d-flex justify-content-center">
+            <div class="card p-3 shadow-sm" style="width: 70%;">
+
+                <div class="row align-items-center">
+
+                    <!-- Image -->
+                    <div class="col-md-3 text-center">
+                        {% if item.recipes %}
+                            <a href="{% url 'follow_page' item.recipes.0.id %}">
+                        {% endif %}
+                            {% if item.profile_image %}
+                                <img src="{{ item.profile_image }}"
+                                     class="rounded-circle"
+                                     style="width:100px; height:100px; object-fit:cover;">
+                            {% else %}
+                                <img src="/static/img/bg-img/sr8.jpg"
+                                     class="rounded-circle"
+                                     style="width:100px; height:100px; object-fit:cover;">
+                            {% endif %}
+                        {% if item.recipes %}
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Info -->
+                    <div class="col-md-6">
+                        {% if item.recipes %}
+                            <a href="{% url 'follow_page' item.recipes.0.id %}"><h4>{{ item.chef.name }}</h4></a>
+                            <p class="text-muted"><a href="{% url 'follow_page' item.recipes.0.id %}">{{ item.chef.email }}</a></p>
+                        {% else %}
+                            <h4>{{ item.chef.name }}</h4>
+                            <p class="text-muted">{{ item.chef.email }}</p>
+                            <small class="text-muted fst-italic">No published recipes yet</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- Button — uses email so it works for both users and chefs -->
+                    <div class="col-md-3 text-center">
+                        {% if item.is_following %}
+                            <a href="{% url 'toggle_follow_by_email' item.chef.email %}" class="btn btn-danger">
+                                Unfollow
+                            </a>
+                        {% else %}
+                            <a href="{% url 'toggle_follow_by_email' item.chef.email %}" class="btn btn-success">
+                                Follow
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-center text-muted mt-4">You are not following anyone yet.</p>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+</body>
+</html>

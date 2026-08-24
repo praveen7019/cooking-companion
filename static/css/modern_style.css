@@ -1,0 +1,10 @@
+/* ===== Modern Style Overrides ===== */
+/* Base utility styles for modern UI components */
+
+.profile-label {
+    font-weight: 600;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: #333;
+}

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="{{ recipe.description|truncatewords:20 }}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    <title>{{ recipe.recipe_name }} | Cooking Companion</title>
+
+    
+    <link rel="icon" href="{% static 'img/core-img/logo2.png' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="stylesheet" href="{% static 'css/style.css.map' %}">
+</head>
+
+<body>
+
+    
+    <div class="search-wrapper">
+        
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="#" method="post">
+                        <input type="search" name="search" placeholder="Type any keywords...">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <header class="header-area">
+
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+
+                        
+                        <a class="nav-brand" href="{% url 'user_dashboard' %}">
+                            <img style="height: 100px; width: 150px;" src="{% static 'img/core-img/logo2.png' %}" alt="Cooking Companion">
+                        </a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                    <li><a href="{% url 'user_dashboard' %}">Home</a></li>
+                                    <li><a href="{% url 'recipe_gallery' %}">Recipes</a></li>
+                                    <li><a  href="{% url 'following_page' %}">Following</a></li>
+                                     
+                                    <li>
+                                        <a href="{% url 'user_profile' %}" class="profile-icon">
+                                            <i class="fa fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'logoutview' %}" class="profile-icon">
+                                            <i class="fa fa-sign-out"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <!-- Search Button -->
+                                 
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    
+    <div class="breadcumb-area bg-img bg-overlay" style="background-image: url({% static 'img/bg-img/breadcumb3.jpg' %});">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <div class="breadcumb-text text-center">
+                        <h2>{{ recipe.recipe_name }}</h2>
+                        <p>{{ recipe.category }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="recipe-post-area section-padding-80">
+
+        <!-- Recipe Image / Video Slider -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {% if recipe.youtube_url %}
+    <div class="yt-container" data-url="{{ recipe.youtube_url }}" 
+         style="position:relative; width:100%; cursor:pointer; border-radius:8px; overflow:hidden; margin-bottom:10px;">
+        <img class="yt-thumb" src="" alt="YouTube Thumbnail"
+             style="width:100%; height:250px; object-fit:cover; display:block;">
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+                    background:rgba(0,0,0,0.7); border-radius:50%; width:64px; height:64px;
+                    display:flex; align-items:center; justify-content:center;">
+            <span style="color:white; font-size:28px; margin-left:5px;">▶</span>
+        </div>
+        <iframe class="yt-iframe" src="" frameborder="0" allowfullscreen
+                style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; border-radius:8px;">
+        </iframe>
+    </div>
+{% elif recipe.recipe_video %}
+    <video controls style="width:100%; max-height:300px; margin-bottom:10px; border-radius:8px;">
+        <source src="{{ recipe.recipe_video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Content Area -->
+        <div class="recipe-content-area">
+            <div class="container">
+
+                <!-- Recipe Headline -->
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="recipe-headline my-5">
+                            <span>By: {{ recipe.user_name }} &nbsp;|&nbsp; {{ recipe.user_email }}</span>
+                            <h2>{{ recipe.recipe_name }}</h2>
+                            <p>{{ recipe.description }}</p>
+                            <div class="recipe-duration">
+                                <h6>Cook: {{ recipe.cooking_time }} mins</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <div class="recipe-ratings text-right my-5">
+                            <div class="ratings">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                            </div>
+                            <a href="#" class="btn delicious-btn">{{ recipe.category }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steps & Ingredients -->
+                <div class="row">
+
+                    <!-- Steps / Instructions -->
+                    <div class="col-12 col-lg-8">
+                        <h4>Instructions</h4>
+
+                        {% for step in recipe.steps.splitlines %}
+                            {% if step %}
+                            <div class="single-preparation-step d-flex">
+                                <h4>{{ forloop.counter|stringformat:"02d" }}.</h4>
+                                <p>{{ step }}</p>
+                            </div>
+                            {% endif %}
+                        {% empty %}
+                            <p>{{ recipe.steps }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="col-12 col-lg-4">
+                        <div class="ingredients">
+                            <h4>Ingredients</h4>
+
+                            {% for ingredient in recipe.ingredients.splitlines %}
+                                {% if ingredient %}
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="ingredient_{{ forloop.counter }}">
+                                    <label class="custom-control-label" for="ingredient_{{ forloop.counter }}">
+                                        {{ ingredient }}
+                                    </label>
+                                </div>
+                                {% endif %}
+                            {% empty %}
+                                <p>{{ recipe.ingredients }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+                <!-- End Steps & Ingredients -->
+
+                <!-- Leave a Comment -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="section-heading text-left">
+                            <h3>Leave a Comment</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="contact-form-area">
+                            <form action="#" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-12 col-lg-6">
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject">
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea name="message" class="form-control" id="message" cols="30" rows="10" placeholder="Message"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn delicious-btn mt-30" type="submit">Post Comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="follow-us-instagram">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Follow Us on Instagram</h5>
+                </div>
+            </div>
+        </div>
+        <!-- Instagram Feeds -->
+        <div class="insta-feeds d-flex flex-wrap">
+            {% for i in "1234567" %}
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta'|add:i|add:'.jpg' %}" alt="Instagram Feed">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+<script>
+function getYouTubeID(url) {
+    // Handles both youtube.com/watch?v=ID and youtu.be/ID formats
+    var match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+}
+
+document.querySelectorAll('.yt-container').forEach(function(container) {
+    var url = container.dataset.url;
+    var videoId = getYouTubeID(url);
+
+    if (!videoId) return;
+
+    // Set thumbnail
+    container.querySelector('.yt-thumb').src = 
+        'https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg';
+
+    // On click: hide thumbnail & play button, show iframe
+    container.addEventListener('click', function() {
+        var iframe = container.querySelector('.yt-iframe');
+        var thumb = container.querySelector('.yt-thumb');
+        var playBtn = container.querySelector('div');
+
+        iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+        iframe.style.display = 'block';
+        thumb.style.display = 'none';
+        playBtn.style.display = 'none';
+
+        // Make container a fixed height so iframe shows properly
+        container.style.height = '315px';
+    });
+});
+</script>
+
+    
+    <script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugins/plugins.js' %}"></script>
+    <script src="{% static 'js/active.js' %}"></script>
+</body>
+
+</html>

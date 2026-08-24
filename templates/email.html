@@ -1,0 +1,64 @@
+<html>
+  <head>
+      {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+ 
+</head>
+<body>
+    <br> 
+  <div class="container" mt="5">
+	<div class="card">
+	<div class="card-header">
+	
+	<h2> Share Recipe Via Email </h2>
+	</div>
+	<div class="card-body">
+	<form action="{% url 'send_email' %}" method="post">
+        {% csrf_token %}
+	<div class="mb-3">
+	<label for="Full Name"> Full Name </label>
+	<input type="text" name="full_name"  id="full_name" style="height:45px;"class="form-control">
+	</div>
+	<div class="mb-3">
+	<label for=" Email Address"> Email Address [Recipient]</label>
+	<input type="email" name="email"  id="email" class="form-control" style="height:45px;" >
+	</div>
+	<div class="mb-3">
+	<label for="subject"> Subject </label>
+	<input type="text" name="subject"  id="subject" class="form-control" style="height:45px;">
+	</div>
+	<div class="mb-3">
+	<label for="Message"> Recipe Details </label>
+	<textarea type="text" name="message"  id="message" class="form-control" rows="3"> </textarea>
+	</div>
+	<div class="mb-3">
+	<button type="submit" name="submitcontact" style="border-radius:0px;" class="btn btn-primary"> Send Mail </button>
+	</div>
+	
+	</div>
+	</div>
+	</div>
+     {% if messages %}
+        <script>
+            {% for message in messages %}
+            alert("{{ message }}");
+            {% endfor %}
+        </script>
+        {% endif %}
+    </form>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Chefs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f7;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #ff6600, #ff914d);
+            padding: 15px 30px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            color: #ffff00;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+        }
+
+        h2 {
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+
+        .chef-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .chef-card {
+            background: #fff;
+            padding: 15px;
+            width: 250px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .chef-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        .chef-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff6600;
+            margin-bottom: 10px;
+        }
+        .chef-card h3 {
+            color: #ff6600;
+            margin-bottom: 5px;
+        }
+        .chef-card p {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0;
+        }
+        .btn-book {
+            text-decoration: none;
+            background-color: #ff6600;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn-book:hover {
+            background-color: #ff914d;
+        }
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        table th {
+            background: linear-gradient(90deg, #ff6600, #ff914d);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        table tr:hover {
+            background-color: #fff5eb;
+            transition: 0.3s;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status badges */
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .status.pending {
+            background-color: #ffc107;
+        }
+
+        .status.approved {
+            background-color: #28a745;
+        }
+
+        .status.rejected {
+            background-color: #dc3545;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+        
+            table tr {
+                margin-bottom: 15px;
+                background: #fff;
+                border-radius: 10px;
+                padding: 10px;
+            }
+        
+            table th {
+                display: none;
+            }
+        
+            table td {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px;
+                border: none;
+                border-bottom: 1px solid #eee;
+            }
+        
+            table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: #ff6600;
+            }
+        }
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+            text-transform: capitalize;
+        }
+
+        /* Colors */
+        .status.pending {
+            background-color: #ffc107; /* Yellow */
+            color: #000;
+        }
+
+        .status.approve {
+            background-color: #28a745; /* Green */
+        }
+
+        .status.disapprove {
+            background-color: #dc3545; /* Red */
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div><b>Cooking Companion</b></div>
+    <div>
+        <a href="{% url 'user_dashboard' %}">Dashboard</a>
+        <a href="{% url 'saved_recipes' %}">Saved Recipes</a>
+        <a href="{% url 'chef_list' %}">Chefs</a>
+         <a href="{% url 'user_booking' %}">My Booking</a>
+        <a href="{% url 'logoutview' %}">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+<h2>My Bookings</h2>
+
+{% if bookings %}
+<table>
+    <thead>
+        <tr>
+            <th>Chef</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>People</th>
+            <th>Instructions</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td data-label="Chef">{{ booking.chef_email }}</td>
+            <td data-label="Date">{{ booking.event_date }}</td>
+            <td data-label="Location">{{ booking.event_location }}</td>
+            <td data-label="People">{{ booking.number_of_people }}</td>
+            <td data-label="Instructions">{{ booking.special_instructions }}</td>
+            <td data-label="Status">
+        <span class="status 
+            {% if booking.status == 'pending' %}pending
+            {% elif booking.status == 'approve' %}approve
+            {% elif booking.status == 'disapprove' %}disapprove
+            {% endif %}
+        ">
+            {{ booking.status }}
+        </span>
+    </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p>No bookings found.</p>
+{% endif %}
+</div>
+</body>
+</html>

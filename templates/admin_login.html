@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cooking Companion - Admin Login</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+    <style>
+        body{
+            background:#f5f5f5;
+          
+        }
+
+        .login-container{
+            width:400px;
+            margin:100px auto;
+            background:white;
+            padding:40px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.2);
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            border:1px solid #ccc;
+            border-radius:5px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#ff6c00;
+            border:none;
+            color:white;
+            font-size:16px;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#e65c00;
+        }
+    </style>
+</head>
+
+<body>
+<header class="header-area">
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        
+                        <a class="navbar-brand" href="{% url 'homepage' %}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                         <li><a href="{% url 'homepage' %}">Home</a></li>
+                                    <li><a href="{% url 'warning' %}">recipies</a></li>
+                                    <li><a href="{% url 'chef_login' %}">chef</a></li>
+                                     <li><a href="{% url 'admin_login' %}">Admin</a></li>
+                                    <li><a href="{% url 'user_login' %}" class="profile-icon">
+                                            <i class="fa fa-user"></i>
+                                        </a>
+                                </ul>
+
+                                
+                                 
+
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+<div class="login-container">
+
+<h2>Cooking Companion Admin</h2>
+
+<form method="POST" action="{% url 'admin_login_validation' %}">
+    {% csrf_token %}
+
+    <label>Email Id</label>
+    <input type="text" name="email" required>
+
+    <label>Password</label>
+    <input type="password" name="password" required>
+
+    <button type="submit">Login</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    <title>Available Chefs - Cooking Companion</title>
+
+    
+    <link rel="icon" href="{% static 'img/core-img/logo2.png' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    
+    <div class="search-wrapper">
+        
+        <div class="close-btn"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="{% url 'search_recipe' %}" method="GET">
+                        <input type="search" name="search" style="width:1000px;" placeholder="Type Durations of recipes">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <header class="header-area">
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        
+                        <a class="navbar-brand" href="{% url 'user_dashboard' %}">
+                        <img src="{% static 'img/core-img/logo2.png' %}" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                    <li><a href="{% url 'user_dashboard' %}">Home</a></li>
+                                    <li><a href="{% url 'recipe_gallery' %}">Recipes</a></li>
+                                    <li ><a href="{% url 'following_page' %}">Following</a></li>
+                                    <li><a href="{% url 'user_profile' %}" class="profile-icon">Profile</a>
+                                    </li>
+                                    <li><a href="{% url 'logoutview' %}" class="profile-icon">
+                                            <i class="fa fa-sign-out"></i> Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+  
+    <div class="breadcumb-area bg-img bg-overlay" style="background-image: url({% static 'img/bg-img/breadcumb3.jpg' %});">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <div class="breadcumb-text text-center">
+                        <h2>Chefs</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-post-area section-padding-20 ">
+        {% for chef in chefs %}
+        <div class=" mb-5 " style="max-width: 100%;">
+            <div style="margin: 30px 10%; width: 80%;">
+                <div class="row g-2 align-items-center" >
+                    
+                    <!-- CHEF IMAGE SECTION -->
+                    <div class="col-md-4 text-center">
+                        <a href="{% url 'book_chef' chef.id %}">
+                             {% if chef.chef_image %}
+                                <img src="{{ chef.chef_image.url }}" alt="{{ chef.name }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 4px solid #40ba37;">
+                            {% else %}
+                                <!-- DEFAULT IMAGE ADDED HERE -->
+                                <img src="{% static 'img/core-img/salad.png' %}" alt="Default Chef" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 4px solid #ccc; padding: 20px;">
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <!-- CHEF DETAILS SECTION -->
+                    <div class="col-md-8">
+                        <div class="card-body ms-5">
+                            <a class="card-title fs-4" href="{% url 'book_chef' chef.id %}"><h3>{{ chef.name }}</h3></a> 
+                            <div class="card-body p-4 pb-3">
+                                <a href="{% url 'book_chef' chef.id %}">( {{ chef.email }} )</a>
+                                <p><b>Contact:</b> {{ chef.contact }}</p>
+                                <p><b>Experience:</b> {{ chef.experince }}</p>
+                                <a href="{% url 'book_chef' chef.id %}" class="btn delicious-btn mt-3">Book Now</a>
+                            </div> 
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="container text-center mt-5 mb-5">
+            <h4>No chefs available at the moment. Please check back later!</h4>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+    <div class="follow-us-instagram">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Follow Us Instagram</h5>
+                </div>
+            </div>
+        </div>
+        <!-- Instagram Feeds -->
+        <div class="insta-feeds d-flex flex-wrap">
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta1.jpg' %}" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta2.jpg' %}" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta3.jpg' %}" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta4.jpg' %}" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta5.jpg' %}" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta6.jpg' %}" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="single-insta-feeds">
+                <img src="{% static 'img/bg-img/insta7.jpg' %}" alt="">
+                <div class="insta-icon">
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <br><br><br>
+
+    
+    <!-- jQuery-2.2.4 js -->
+    <script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'js/bootstrap/popper.min.js' %}"></script>
+    <!-- Bootstrap js -->
+    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    <!-- All Plugins js -->
+    <script src="{% static 'js/plugins/plugins.js' %}"></script>
+    <!-- Active js -->
+    <script src="{% static 'js/active.js' %}"></script>
+    
+    {% if messages %}
+    <script>
+      {% for message in messages %}
+        alert("{{ message }}");
+      {% endfor %}
+    </script>
+    {% endif %}
+</body>
+</html>

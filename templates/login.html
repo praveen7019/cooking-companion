@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Login</title>
+     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+  --bs-font-sans-serif: "Work Sans", sans-serif;
+  --bs-body-font-family: var(--bs-font-sans-serif);
+}
+
+body {
+  font-family: var(--bs-body-font-family);
+}
+
+p{
+font-family: var(--bs-body-font-family);
+}
+</style>
+</head>
+<header class="header-area">
+        
+        <div class="delicious-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    
+                    <nav class="classy-navbar justify-content-between" id="deliciousNav">
+                        
+                        
+                        <a class="navbar-brand" href="{% url 'homepage' %}">
+                        <img src="/static/img/core-img/logo2.png" alt="Cooking Companion" height="800px" width="200px"></a>
+
+                        
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+                        </div>
+
+                        
+                        <div class="classy-menu">
+
+                            
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
+
+                            
+                            <div class="classynav">
+                                <ul>
+                                     <li><a href="{% url 'homepage' %}">Home</a></li>
+                                    <li><a href="{% url 'warning' %}">recipies</a></li>
+                                    <li><a href="{% url 'chef_login' %}">chef</a></li>
+                                     <li><a href="{% url 'admin_login' %}">Admin</a></li>
+                                    <li><a href="{% url 'user_login' %}" class="profile-icon">
+                                            <i class="fa fa-user"></i>
+                                        </a>
+                                </ul>
+
+                                
+                                 
+
+                            </div>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+<br>
+    <div class="cont ">
+        <div class="form sign-in" style="color:black;">
+            <form action="{% url 'unified_login_validation' %}" method="POST" >
+                {% csrf_token %}
+            <h2>Welcome</h2>
+            <label>
+                <span style="color:black;">Email</span>
+                <input type="email" name="email" />
+            </label>
+            <label>
+                <span style="color:black;">Password</span>
+                <input type="password"  name="password"/>
+            </label>
+           <a href="{% url 'forgot_password_user' %}"> <p class="forgot-pass" style="color:black;">Forgot password?</p> </a>
+            <button type="submit" class="submit">Sign In</button>
+        </form>
+        </div>
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                 
+                    <h3>Don't have an account? Please Sign up!<h3>
+                </div>
+                <div class="img__text m--in">
+                
+                    <h3>If you already has an account, just sign in.<h3>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">Sign Up</span>
+                    <span class="m--in">Sign In</span>
+                </div>
+            </div>
+            <div class="form sign-up" style="color:black;">
+                <form action="{% url 'user_register_code' %}" method="POST">
+                    {% csrf_token %}
+                <h2>Create your Account</h2>
+                <label>
+                    <span style="color:black;">Name</span>
+                    <input type="text" name="name" />
+                </label>
+                <label>
+                    <span style="color:black;">Email</span>
+                    <input type="email" name="email"/>
+                </label>
+                <label>
+                    <span style="color:black;">Contact Number</span>
+                    <input type="tel" name="contact" maxlength="10" pattern="[6-9][0-9]{9}" />
+                </label>
+                <label>
+                    <span style="color:black;">Password</span>
+                    <input type="password" name="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}" 
+            title="Password must contain: One Uppercase, One Lowercase, One Digit, One Special Character, min 8 chars"/>
+                </label>
+                <button type="submit" class="submit">Sign Up</button>
+                
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.img__btn').addEventListener('click', function() {
+            document.querySelector('.cont').classList.toggle('s--signup');
+        });
+    </script>
+
+ {% if messages %}
+    <script>
+      {% for message in messages %}
+        alert("{{ message }}");
+      {% endfor %}
+    </script>
+    {% endif %}
+</body>
+</html>

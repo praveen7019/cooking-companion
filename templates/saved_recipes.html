@@ -1,0 +1,36 @@
+  <html>
+    <head>
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    
+    <title>Cooking Companion</title>
+
+    
+     <link rel="icon" href="/static/img/core-img/logo2.png"><link rel="stylesheet" href="{% static 'css/modern_style.css' %}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="stylesheet" href="{% static 'css/style.css.map' %}">
+    </head>
+<body>
+<h2>My Saved Recipes</h2>
+
+{% for item in saved %}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px; color:black;">
+        <a href="{% url 'recipe_detail' item.recipe.id %}">
+            <h3>{{ item.recipe.recipe_name }}</h3>
+            <img src="{{ item.recipe.recipe_image.url }}" width="200">
+            <p style="color:black;" >{{ item.recipe.description }}</p>
+        </a>
+        <p style="color:black;" ><b>Cooking Time:</b> {{ item.recipe.cooking_time }} mins</p>
+    </div>
+{% empty %}
+    <p>No saved recipes yet.</p>
+{% endfor %}
+</body>
+</html>
